@@ -7,7 +7,8 @@ add_subdirectory(3rdParty)
 include_directories(3rdParty/lodepng)
 
 add_executable(Task1
-    Task1.cpp)
+    Task1.cpp
+    Vector3.hpp)
 
 
 target_link_libraries(Task1 
@@ -15,7 +16,8 @@ target_link_libraries(Task1
     )
     
 add_executable(Task2
-    Task2.cpp)
+    Task2.cpp
+    Vector3.hpp)
 
 
 target_link_libraries(Task2 

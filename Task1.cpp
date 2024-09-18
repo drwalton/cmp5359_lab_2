@@ -2,6 +2,7 @@
 #include <lodepng.h>
 #include <fstream>
 #include <sstream>
+#include "Vector3.hpp"
 
 // The goal for this lab is to draw a triangle mesh loaded from an OBJ file from scratch,
 // building on the image drawing code from last week's lab.
@@ -10,75 +11,11 @@
 // For now, we will just try to draw all the vertices as points, ignoring the indices.
 
 // *** Your Code Here! ***
-// * Task 1: Write your own class to store 3D floating-point vectors!
-//           Your class will be used to store the vertex positions loaded from the OBJ file.
-class Vector
-{
-public:
-	Vector()
-		:x_(0), y_(0), z_(0)
-	{
-		// YOUR CODE HERE
-	}
-	Vector(float x, float y, float z)
-		:x_(x), y_(y), z_(z)
-	{
-		// YOUR CODE HERE
-	}
-
-	// Implement this method to add two vectors.
-	Vector operator+(const Vector& other) const
-	{
-		// YOUR CODE HERE
-		return Vector(x_ * other[0], y_ * other[1], z_ * other[2]);
-	}
-
-	// Multiply the vector by a scalar.
-	Vector operator*(float scalar) const
-	{
-		// YOUR CODE HERE
-		return Vector(x_ * scalar, y_ * scalar, z_ * scalar);
-	}
-
-	// Get a component of the vector
-	float& operator[](int i)
-	{
-		if (i == 0) return x_;
-		if (i == 1) return y_;
-		if (i == 2) return z_;
-		else throw std::runtime_error("Oh no vector issues");
-		// YOUR CODE HERE
-	}
-
-	float operator[](int i) const
-	{
-		if (i == 0) return x_;
-		if (i == 1) return y_;
-		if (i == 2) return z_;
-		else throw std::runtime_error("Oh no vector issues");
-		// YOUR CODE HERE
-	}
-
-
-private:
-	// Add the data to store the x, y and z coordinates of the vector.
-	float x_, y_, z_;
-};
-
-// Note: adding this version of operator* will let us do scalar * vector, as well as vector * scalar.
-// see how it makes use of the operator* you define above.
-Vector operator*(float scalar, const Vector& vector)
-{
-	return vector * scalar;
-}
-
-// This tells us how to add the vector to a stream
-// For example, how to print the vector with std::cout.
-std::ostream& operator<<(std::ostream& stream, const Vector& v)
-{
-	stream << "(" << v[0] << ", " << v[1] << ", " << v[2] << ")";
-	return stream;
-}
+// * Task 1: Your first task is actually in the Vector3.hpp file.
+//           I've started off a class here to store and manipulate 3D floating-point vectors.
+//           We'll need to use this to load and draw the triangle mesh from the OBJ file.
+//           Switch over to Vector3.hpp in the Header Files section of this project, and 
+//           complete writing the class.
 
 void setPixel(std::vector<uint8_t>& image, int x, int y, int width, int height, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255)
 {
@@ -109,14 +46,15 @@ int main()
 
 	std::ifstream bunnyFile(bunnyFilename);
 
-
 	// *** Task 2 ***
 	// Your next task is to load all the vertices from the OBJ file.
 	// I've given you some starter code here that reads through each line of the
 	// OBJ file and makes it into a stringstream.
+	// The lines containing the vertices start with a 'v', so first check if each line
+	// starts with a v.
 	// For these V lines, you should load the X, Y and Z coordinates into a new vector
 	// and push it back into your array of vertices.
-	std::vector<Vector> vertices;
+	std::vector<Vector3> vertices;
 	std::string line;
 	while (!bunnyFile.eof())
 	{
@@ -125,7 +63,7 @@ int main()
 		char lineStart;
 		lineSS >> lineStart;
 		if (lineStart == 'v') {
-			Vector v;
+			Vector3 v;
 			for (int i = 0; i < 3; ++i) lineSS >> v[i];
 			vertices.push_back(v);
 
